@@ -1,0 +1,10 @@
+# Producenci szczepionek (id | nazwa | dzienna produkcja)
+0 | BioTech 2.0     | 900
+# Apteki (id | nazwa | dzienne zapotrzebowanie)
+0 | CentMedEko Centrala | 450
+1 | CentMedEko 24h | 690
+2 | CentMedEko Nowogrodzka | 1200
+# Połączenia producentów i aptek (id producenta | id apteki | dzienna maksymalna liczba dostarczanych szczepionek | koszt szczepionki [zł] )
+0 | 0 | 800 | 70.5
+0 | 1 | 600 | 70
+0 | 2 | 750 | 90.99

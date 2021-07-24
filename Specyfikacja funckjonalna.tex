@@ -1,0 +1,69 @@
+\documentclass[12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+
+\renewcommand{\baselinestretch}{1.5}
+\begin{document}
+\begin{titlepage}
+\title{AISD - Projekt indywidualny \\
+Specyfikacja funkcjonalna 
+}
+\author{Szymon Motłoch}
+\maketitle
+\end{titlepage}
+\section{Cel projektu}
+\qquad Celem projektu jest utworzenie aplikacji, która będzie wspomagała prace zespołu analityków w firmie posiadającej sieć aptek. Zadaniem aplikacji będzie wyznaczanie danych mówiących o tym ile konkretna apteka powinna dziennie zamawiać sztuk szczepionek na koronawirusa od dostępnych dostawców. Wyznaczona lista ukazująca zamówienia jakie powinna wykonać każda apteka będzie najbardziej optymalnym dla firmy rozwiązaniem. Rozwiązanie to zapewni zaspokojenie potrzeb aptek w jak największym stopniu, jednocześnie minimalizując sumaryczny koszt wszystkich zamówień. \\
+\qquad Aplikacja będzie mogła tego dokonać na podstawie dostarczonych danych od grupy menadżerów. Dane te będą zawierały informację dotyczące producentów szczepionek z którymi firma ma podpisane umowy wraz z maksymalną ilością sztuk szczepionek jakie dany producent jest w stanie dziennie wytworzyć. Oprócz tego dane będą zawierać informację o posiadanych przez firmę aptekach wraz z ich dziennym zapotrzebowaniem na szczepionki. Pojawią się również informację na temat umów podpisanych między aptekami a dostawcami - maksymalna ilość sztuk, które producent może dostarczyć dziennie do apteki wraz z kosztem szczepionki za sztukę.
+
+\section{Dane wejściowe}
+\qquad W celu wyznaczenia rozpiski mówiącej o tym ile sztuk szczepionki, dana apteka powinna dziennie zamawiać od dostawców, należy dostarczyć plik tekstowy z rozszerzeniem ,,.txt".
+Plik ten powinien zawierać takie dane jak:
+
+\begin{itemize}
+  \item Lista dostępnych producentów szczepionek wraz z dzienną ilością produkowanych szczepionek
+  \item Lista posiadanych przez firmę aptek wraz z dziennym zapotrzebowaniem na szczepionki
+  \item Lista połączeń między producentami a aptekami, wraz z maksymalną dzienną liczbą sztuk szczepionki, która może być dostarczona do danej apteki oraz ceną za jedną sztukę szczepionki.
+\end{itemize}
+
+Kolejność podawanych list ma znaczenie i powinna być zgodna z kolejnością powyżej wymienionych punktów. \\
+Każda lista zaczyna się od wiersza zawierającego nagłówek. Każdy z nagłówków musi rozpoczynać się od znaku hash (\#). Dzięki temu aplikacja będzie wiedziała, że w danym wierszu znajduje się nagłówek, a nie kolejne wartości listy. Kolejne znaki w nagłówku nie mają znaczenia - stanowią tylko opis listy, który jest przeznaczony dla użytkownika. Opis ten dostarcza informację o tym jakie dane są przechowywane w liście oraz jakie kolumny posiada dana lista. Dzięki temu użytkownik będzie wiedział w jaki sposób konstruować elementy listy oraz co każda z kolumn w danej liście oznacza.\\
+Istotne jest żeby nagłówek mieścił się w jednym wierszu. 
+
+\bigskip
+
+\quad Każda lista będzie zawierała kilka kolumn, które będą miały odpowiednie znaczenie. 
+W jednym wierszu będzie znajdować się jeden rekord. Wartości przynależące do danych kolumn będą rozdzielane specjalnym separatorem składającym się kolejno z 3 znaków: spacji, pionowej kreski oraz kolejnej spacji. Separator ten będzie wyglądał następująco: ,, {\textbar} ". \\
+Tak więc pierwszym wierszem pliku będzie nagłówek listy, która zawiera informacje o producentach szczepionek. Kolejne kolumny w tej liście będą oznaczać: identyfikator producenta, nazwę producenta oraz ilość sztuk dziennie produkowanych przez producenta szczepionek. Identyfikator musi być liczbą całkowitą. Ilość sztuk dziennie produkowanych szczepionek musi być liczbą całkowitą, nieujemną. Nazwa producenta nie może w nazwie zawierać separatora ,, {\textbar} ".   \\
+Kolejne wiersze będą oznaczać kolejnych producentów należących do tej listy. Lista powinna zawierać co najmniej jednego producenta. \\
+Następnie będzie znajdować się lista posiadanych przez firmę aptek. Zacznie się ona od wiersza stanowiącego nagłówek. W skład tej listy będą wchodzić kolejno następujące kolumny: identyfikator apteki, nazwa apteki oraz dzienne zapotrzebowanie liczby sztuk szczepionki. Identyfikator, tak jak w poprzednim przypadku, musi być liczbą całkowitą natomiast dzienne zapotrzebowanie na szczepionki liczbą całkowitą, nieujemną. Nazwa apteki nie może również zawierać w sobie separatora kolumn. Lista ta także musi mieć co najmniej jeden rekord. \\
+Ostatnią listą jest lista przedstawiająca połączenie producentów i aptek. Będzie się ona składać kolejno z następujących  kolumn: identyfikator producenta, identyfikator apteki, dzienna maksymalna liczba dostarczanych szczepionek oraz koszt szczepionki podany w złotych. Dzięki takiemu zestawieniu można opisać jakie dana apteka ma podpisane umowy z poszczególnymi producentami. W tym przypadku wartości identyfikatorów muszą być również liczbami całkowitymi. Maksymalna ilość dostarczonych sztuk ma być liczbą całkowitą, nieujemną. Cena może być nieujemną liczbą całkowita lub rzeczywistą. Jeśli cena nie jest całkowitą liczbą, to może być użyty przecinek lub kropka w celu odróżnienia części całkowitej od części ułamkowej. \\
+Lista ta musi posiadać wpisy dotyczące wszystkich aptek. Poza tym w tej liście muszą wystąpić wpisy określające umowę aptek z każdym wymienionym producentem w pierwszej liście.
+
+\section{Dane wyjściowe}
+\qquad Wynikiem działania programu będzie utworzenie w odpowiedniej lokalizacji pliku tekstowego z rozszerzeniem ,,txt". Plik ten będzie zawierał spis zamówień jakie każda apteka powinna złożyć u danego producenta. Dla każdego zamówienia będzie podana liczba zamawianych sztuk, cena za jedną sztukę oraz sumaryczna wartość każdego zamówienia. Po wypisaniu wszystkich połączeń, będzie na koniec podana informacja przedstawiająca wartość opłaty całkowitej za wszystkie zamówienia.
+
+\section{Użytkowanie programu}
+\qquad Użytkownikom końcowym programu zostanie dostarczony folder z programem. W dostarczonym folderze oprócz niezbędnych plików programu, będą znajdować się również dwa dodatkowe foldery. Pierwszy z nich będzie się nazywał ,,Dane wejściowe", natomiast drugi z nich będzie nosił nazwę ,,Wyniki". Przed uruchomieniem programu należy dodać odpowiednio skonfigurowany plik tekstowy z danymi wejściowymi do pierwszego z tych folderów. 
+
+\quad Aby uruchomić program należy uruchomić wiersz poleceń w systemie operacyjnym i przekierować się w nim do lokalizacji dostarczonego folderu z programem. W systemie Windows można tego dokonać poprzez  wpisanie w wierszu poleceń komendy ,,cd" oraz dodanie po spacji ścieżki do wskazanego folderu. Następnie w wierszu poleceń należy wpisać polecenie: java Dostawy \textless Nazwa pliku wejściowego\textgreater. W miejsce \textless Nazwa pliku wejściowego\textgreater należy wpisać nazwę pliku tekstowego dla którego program ma rozwiązać problem. \\
+Nie należy podawać nazwy z rozszerzeniem pliku, wystarczająca jest sama nazwa pliku. Jeśli nazwa ta została źle wprowadzona to w konsoli pojawi się komunikat: ,,Plik o podanej nazwie nie istnieje. Proszę się upewnić, że podana nazwa pliku jest prawidłowa oraz że plik znajduje się w folderze z danymi wejściowymi." Po tym komunikacie program zakończy działanie. \\
+Może się zdarzyć, że pojawi się tutaj także inny błąd. Będzie to oznaczać prawdopodobnie, że polecenie do uruchomienia programu zostało źle wpisane.
+Jeśli plik został odnaleziony przez program, zostanie wyświetlony komunikat: ,,Trwa sprawdzanie poprawności danych w pliku wejściowym...". \\
+\qquad W przypadku wykrycia błędnych danych w pliku wejściowym program wyświetli komunikat o błędzie w tym pliku. W komunikacie znajdą się szczegółowe dane błędu. Użytkownik zostanie poinformowany o tym w którym wierszu występuję błąd oraz otrzyma możliwe precyzyjny komunikat informujący o tym co jest błędem. Po wyświetleniu komunikatu program przestanie działać.\\
+Przykładowy komunikaty z błędem mogą mówić o tym, że: 
+\begin{itemize}
+  \item Wskazany plik jest pusty
+  \item Nie zostały podane wszystkie wymagane wartości kolumn w danym wierszu
+  \item Cena musi mieć wartość dodatnią
+  \item Nie podano wszystkich możliwych połączeń dla danej apteki
+\end{itemize}
+
+Jeśli program nie znajdzie żadnych błędów, pokaże się komunikat: ,,Dane wejściowe są poprawne. Trwa wyznaczanie optymalnego rozwiązania problemu...". \\
+Po rozwiązaniu problemu zostanie utworzony plik wyjściowy w folderze ,,Wyniki". Będzie miał taką nazwę jak plik wejściowy z dopiskiem na końcu ,, - wyniki". Program poinformuje użytkownika o tym, że problem został rozwiązany oraz podane nazwę pliku wyjściowego.
+
+\qquad Jeśli zdarzy się tak, że program znajdzie więcej niż jedno równoważne rozwiązanie problemu, poda w pliku tylko jedno z nich.
+
+\section{Podstawowe wymagania techniczne}
+\qquad Aby móc uruchomić program, wymagany jest komputer z dowolnym systemem operacyjnym. Należy na nim mieć zainstalowaną maszynę wirtualną Javy.
+\end{document}

@@ -1,0 +1,88 @@
+\documentclass[12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+
+\renewcommand{\baselinestretch}{1.5}
+
+\begin{document}
+\begin{titlepage}
+
+\title{AISD - Projekt indywidualny \\
+Specyfikacja implementacyjna 
+}
+
+\author{Szymon Motłoch}
+\maketitle
+\end{titlepage}
+
+\section{Cel projektu}
+\qquad Celem projektu jest utworzenie aplikacji, która będzie wspomagała prace zespołu analityków w firmie posiadającej sieć aptek. 
+
+\section{Wykorzystane technologie}
+\qquad Aplikacja zostanie utworzona przy użyciu języka Java w wersji 15. Aplikacja będzie powstawać na systemie operacyjnym Windows. Przy tworzeniu aplikacji zostanie użyte środowisko programistyczne ,,Apache NetBeans IDE 12.1".
+
+\section{Informacje ogólne}
+\qquad Aplikacja ma być uruchamiana z wiersza poleceń. Jako parametr wejściowy aplikacji ma być podawana nazwa pliku wejściowego z którego będą odczytywane dane wejściowe. W folderze z aplikacją będzie wydzielony specjalny folder, który będzie zawierał dostępne pliki wejściowe, a także folder gdzie będą zapisywane pliki wyjściowe. Aplikacja nie będzie posiadała interfejsu graficznego. Wszystkie komunikaty dotyczące postępów w działaniu programu oraz błędów  będą wyświetlane w wierszu poleceń, w którym została uruchamiana aplikacja. Docelowe dane wyjściowe zostaną zapisane do pliku z danymi wyjściowymi.
+
+\section{Wykorzystane struktury danych i algorytmy}
+W tym rozdziale opisane są użyte w projekcie struktury danych i algorytmy.
+\subsection{Wczytywanie danych}
+\qquad Do operacji wejścia plików tekstowych zostanie użyta gotowa klasa ,,BufferedReader", natomiast do zapisania wyników do pliku wyjśćiowego klasa ,,FileWriter". Znajdują się one odpowiednio w paczkach ,,java.io.FileReader" oraz ,,java.io.FileWriter" \\
+\qquad
+
+ W celu zapisywania danych z 2 pierwszych tabel, które przechowują informacje o potrzebach aptek oraz o podaży producentów, zostanie użyty słownik (Map) znajdujący się w paczce ,,java.util". Wartości te zostaną zapisane w takiej strukturze, ponieważ mają one unikalne identyfikatory. Tabele te będą głównie wykorzystywane do pobierania z nich wartości po identyfikatorze. Użycie słownika zapewni szybką realizację tej czynności. Poza tym użycie słownika automatycznie zapewni nam walidacje odnośnie tego czy nie występują duplikaty wartości w tych tabelach. \\
+Wartości ostatniej tabeli zostaną zapisane w liście ,,ArrayList" znajdujące się w pakiecie ,,java.util". Każda z wczytywanych z pliku wejściowego tabel: producenci szczepionek, apteki oraz połączenia producentów i aptek będą zapisane do osobnych słowników oraz listy. Każda z map i lista będzie zawierała obiekty, które będą instancjami klas utworzonymi na podstawie tabel. \\
+Użycie listy w ostatnim przypadku pozwali na proste dodawanie nowych rekordów do struktury. W sytuacji gdy nie wiadomo jak wiele rekordów zostanie dodanych, lista jest dobrym rozwiązaniem. Poza tym lista ta będzie później wykorzystywana jako macierz po której będą następować iteracje. \\
+
+Wczytywane dane wejściowe z pliku będą sprawdzane po każdym wczytaniu wiersza. Algorytm walidacji pliku będzie uznawał wczytany wiersz z pliku, który rozpoczynaja się od znaku hasztag, za wiersz z opisem kolumny, który nie będzie brany pod uwagę. Algorytm ten również będzie uznawał, że podawana kolejność tabel wejściowych jest zgodna z przyjętym schematem. Ciąg znaków w wierszu będzie dzielony na pojedyncze tokeny. Wartości kolumn będą dzielone specjalnym tokenem składającym się ze spacji, pionowej kreski oraz spacji. Wszystkie nadmiarowe spacje, poza tymi które był by dodawane na końcu prawidłowo zapisanego wiersza, będą zgłaszane jako błąd pliku. Mając wydzielone poszczególne wartości kolumn, zostanie sprawdzone czy zostały zapisane wszystkie kolumny dla tabeli. Kolejno zostanie sprawdzona również zgodność typów danych, a także zostanie sprawdzone czy dane spełniają nałożone na pola warunki (na przykład czy wartość jest dodatnia).\\
+ W przypadku nie spełnienia jakiegoś z wymogów, zostanie wysłany precyzyjny komunikat, który poda numer linii gdzie występuje błąd oraz poinformuje o typie tego błędu. \\
+Gdy wszystkie dane zostaną wczytane, zostanie sprawdzone czy wszystkie rekordy z dwóch pierwszych tabel, mają powiązanie w ostatniej tabeli.
+
+\subsection{Wyznaczanie optymalnego rozwiązania problemu}
+\qquad Główny problem, który ma rozwiązać aplikacja, nawiązuje do zagadnienia transportowego. Do rozwiązania tego problemu wykorzystuje się algorytm transportowy, który może być rozwiązany na kilka sposobów. Podstawą jest utworzenie macierzy przewozów, która przedstawia zapotrzebowanie odbiorców, ilość wyprodukowanego towarów przez dostawców oraz koszt dostawy do danego odbiorcy. Macierz ta będzie odwzorowana przez wczytaną wcześniej listę oraz 2 słowniki. Zagadnienie transportowe ma interpretację sieciową, która jest przedstawiania jako sieć skierowana (digraf ważony) \\
+Wyróżnia się zagadnienie transportowe otwarte oraz zamknięte. Zamknięte zagadnienie to takie gdzie podaż na towar w rozpatrywanych danych jest równa popytowi. Jeśli towaru, który może być dostarczony jest więcej niż towaru, który będzie kupiony, lub w przeciwnym przypadku gdy towaru dostarczanego jest mniej niż towaru, który może być kupiony, mamy wówczas do czynienia z otwartym problemem transportowym. \\
+Otwarty problem transportowy musi być sprowadzony do zamkniętego problemu transportowego.
+W przypadku gdy występuje większa podaż niż popyt do musi zostać dodany wirtualny odbiorca, który przejmie cały nadmiar towaru. \\
+Jeśli popyt jest większy niż podaż, wówczas należy dodawać wirtualnego dostawce, który wyrówna brak podaży z popytem. \\
+Dodane wartości nie będą później uwzględnianie - pozwalają wyłącznie zrównać wartości podaży i popytu co pozwoli na rozwiązanie problemu. \\
+
+Kolejnym krokiem jest wyznaczenie rozwiązania początkowego. Można w tym celu użyć metody minimalnego elementu macierzy. Rozwiązanie uzyskane tą metodą nie daje jeszcze gwarancji uzyskania najbardziej optymalnego rozkładu, ale przez to, że uwzględnia cenę dostaw między producentem a odbiorcą towaru, stwarza szansę na to, że w dalszej części algorytmu będzie mniej iteracji do wywołania. Istnieje również szansa, że na tym etapie uzyskany zostanie optymalny rozkład. \\
+Metoda ta rozmieszcza przewozy głównie na trasach gdzie koszty są najniższe. Najpierw macierz kosztów jest przekształca tak aby w każdym wierszu i w każdej kolumnie było co najmniej jedno zero. Odbywa się się przez odejmowanie od elementów wierszy macierzy kosztów, które są najmniejsze w danym wierszu. Analogicznie odejmuje się elementy dla kolumn. Elementy zerowe tej macierzy oznaczają trasy gdzie najniższe są koszty przewozów.
+Kolejno następuje rozmieszczenie przewozów zaczynając od zerowych klatek. Rozmieszczenie to uwzględnia popyt, który pozostał w danej aptece, podaż, która została przy danym producencie oraz maksymalną ilość jaka może być przetransportowana między producentem a apteką. \\
+Jeśli wszystkie rozmieszczenia nastąpią jedynie w zerowych kolumnach, to znaczy, że otrzymana macierz rozwiązań jest już optymalną macierzą i można zakończyć wykonywanie tego algorytmu. \\
+Jeśli metoda minimalnego elementu macierzy nie dała optymalnego rozwiązania, należy skorzystać z metody, która zapewni wyznaczenie rozwiązania optymalnego. Taką metodą jest na przykład metoda zmodyfikowanej dystrybucji. \\
+
+Metoda zmodyfikowanej dystrybucji polega ona na wyznaczeniu potencjału dla nie obsadzonych komórek na podstawie wyznaczony w odpowiedni sposób wcześniej liczb indeksowych. W sytuacji gdzie nie występują dodatkowe ograniczenia odnośnie maksymalnej ilości transportowanych sztuk między producentem a odbiorcą, rozwiązanie jest optymalne gdy wszystkie potencjały będą nieujemne. W tym przypadku trzeba będzie uwzględnić również to dodatkowe ograniczenie. \\
+Proces będzie polegał na wyznaczaniu wolnych pól o największym co do wartości bezwzglęndej ujemnym potencjale. Następnie zostanie skonstruowana ścieżka dla tego pola metodą ,,z kamienia na kamień". Ze wszystkich ścieżek, którym przypisano ujemny znak wybierana jest najmniejsza ulokowana tam wartość. W zależności od znaku jest zwiększana lub zmniejsza alokacja pól na ścieżce. \\
+Tak przeprowadzany algorytm powinien doprowadzić do otrzymania optymalnego rozwiązania.
+Jeśli jakiś potencjał ma wartość zero to rozwiązanie optymalne nie jest wówczas jednoznaczne.
+
+\section{Elementy poddane testom}
+\qquad W projekcie zostaną utworzone testy jednostkowe. Testowane będzie między innymi wczytywanie pliku wejściowego oraz walidacja danych wejściowych. Zostaną sprawdzone takie przypadki jak na przykład:
+  
+\begin{itemize}
+  \item Brak wskazanego pliku 
+  \item Wczytanie pliku pustego
+  \item Brak wszystkich tabel w pliku
+  \item Brak wszystkich kolumn w tabeli
+  \item Brak danych w tabeli
+  \item Brak wymaganych powiązań w tabeli producent - apteka
+  \item Nieprawidłowy format ( na przykład dodatkowe spacje)
+  \item Nieprawidłowy typ danych
+  \item Nieprawidłowy wartości danych
+  \item Dodanie dodatkowych pustych wierszy na początku pliku, w środku oraz na końcu
+  \end{itemize}
+
+Sprawdzone również zostaną niektóre elementy rozwiązania głównego problemu jak na przykład:
+\begin{itemize}
+  \item Sprawdzenie czy rozwiązanie końcowe spełnia wszystkie narzucone warunki 
+  \item Sprawdzenie czy wykonanie poszczególnych elementów algorytmu nie powoduje utraty spełnienia warunków
+  \item Test głównego algorytmu w przypadku otrzymania pustej lisy lub wartości null
+  
+
+  
+\end{itemize}
+
+
+\end{document}
